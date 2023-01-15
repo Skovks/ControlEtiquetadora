@@ -51,7 +51,7 @@ float error1;
 float error2;
 
 float kp=1;
-float ki=1;
+float ki=5;
 float kd=0.01;
 float tm=0.1;
 
@@ -62,11 +62,13 @@ void setup() {
   pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);
   
-  pinMode(2, INPUT_PULLUP); // internal pullup input pin 2 
-  
+  pinMode(2, INPUT_PULLUP); // internal pullup input pin 2 encoder 
+  pinMode(18,INPUT_PULLUP);
    //Setting up interrupt
   //A rising pulse from encodenren activated ai0(). AttachInterrupt 0 is DigitalPin nr 2 on moust Arduino.
   attachInterrupt(0, ai0, RISING);
+  //A rising pulse from encodenren activated ai0(). AttachInterrupt 5 is DigitalPin nr 18 on moust Arduino.
+  attachInterrupt(5, microsw, RISING);
    
   }
    
@@ -93,6 +95,13 @@ void setup() {
   // ai0 is activated if DigitalPin nr 2 is going from LOW to HIGH
   // Check pin 3 to determine the direction
   pulsos++;
+  }
+  void microsw() {
+  while(true){
+    Serial.println("esperando");
+    Serial.println("hasta boton de reinicio");
+    delay(5000);
+  }
   }
 
   float ultrasonico(){
@@ -170,5 +179,6 @@ void setup() {
     delay(200);
    }
   }
+
 
   
