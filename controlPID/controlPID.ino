@@ -1,19 +1,19 @@
 #include <DigiPotX9Cxxx.h>
 
-DigiPot pot(5, 3, 4);
+DigiPot pot(6, 4, 5);
 /*
    DigiPot.pde - Example sketch for Arduino library for managing digital potentiometers X9C1xxx (xxx = 102,103,104,503).
    By Timo Fager, Jul 29, 2011.
    Released to public domain.
 
    For this example, connect your X9C103P (or the like) as follows:
-   1 - INC - Arduino pin 5
-   2 - U/D - Arduino pin 3
+   1 - INC - Arduino pin 6
+   2 - U/D - Arduino pin 4
    3 - VH  - 5V
    4 - VSS - GND
    5 - VW  - Output: 150 Ohm resistor -> LED -> GND
    6 - VL  - GND
-   7 - CS  - Arduino pin 4
+   7 - CS  - Arduino pin 5
    8 - VCC - 5V
 
  **/
@@ -25,8 +25,8 @@ int motor = 9; //motor
 int trigPin = 12;    // Trigger
 int echoPin = 13;    // Echo
 float duration, cm, dis;
-bool estado;
 int etiqueta = 10;
+int microsw=8;
 
 //variables encoder
 volatile long temp, counter = 0; //This variable will increase or decrease depending on the rotation of encoder
@@ -64,13 +64,13 @@ void setup() {
   pinMode(motor, OUTPUT);
   pinMode(etiqueta, INPUT);
   digitalWrite(motor, HIGH);
-  pinMode(20, INPUT);
+  pinMode(microsw, INPUT);
   pinMode(2, INPUT_PULLUP); // internal pullup input pin 2 encoder
   //Setting up interrupt
   //A rising pulse from encodenren activated ai0(). AttachInterrupt 0 is DigitalPin nr 2 on moust Arduino.
   attachInterrupt(0, ai0, RISING);
   //A rising pulse from encodenren activated ai0(). AttachInterrupt 5 is DigitalPin nr 18 on moust Arduino.
-  //attachInterrupt(3, microsw, LOW);
+  attachInterrupt(1, etiquetaM, CHANGE);
 
 }
 
@@ -78,24 +78,14 @@ void loop() {
   //Serial.print("switch estado: ");
   //Serial.println(digitalRead(20));
   dis = ultrasonico();
-  //Serial.println(dis);
-  if (dis <= 4.0 and dis > 2) { //deteccion a 4 cm
-    delay(300); //espera de
-    //secuencia
+  Serial.println(dis);
+  if (dis < 6.0 and dis > 2) { //deteccion a 4 cm
+    delay(50); //espera de secuencia
     digitalWrite(motor, LOW);
     //Serial.print("motor estado: ");
     //Serial.println(digitalRead(motor));
-    etiquetaM();
-    //Serial.println(estado);
-    while (estado = 1) {
-      pid();
-    }
-    digitalWrite(motor,HIGH);
+    pid();
   }
-  else {
-    //digitalWrite(motor, HIGH);
-  }
-
 
 }
 
@@ -104,10 +94,8 @@ void ai0() {
   // Check pin 3 to determine the direction
   pulsos++;
 }
-void microsw() {
-  Serial.println("esperando");
-  Serial.println("hasta boton de reinicio");
-  delay(5000);
+void etiquetaM(){
+  digitalWrite(motor,HIGH);
 }
 
 float ultrasonico() {
@@ -129,10 +117,6 @@ float ultrasonico() {
   return cm;
 }
 
-void etiquetaM() {
-  estado = digitalRead(etiqueta);
-}
-
 void pid() {
   x1 = millis();
   if (x1 - x0 >= 1000) {
@@ -142,8 +126,8 @@ void pid() {
     rpm = abs(mul / deltat);
     vetq = rpm * 2 * pi * 3.25 * 0.0254 * 0.5;
     seg = x1 / 1000;
-    Serial.print("pulsos");
-    Serial.println(pulsos);
+    //Serial.print("pulsos");
+    //Serial.println(pulsos);
     Serial.print("vetq: ");
     Serial.println(vetq);
     temp = pulsos;
