@@ -1,0 +1,4 @@
+[Desktop Entry]
+Name=HMI
+Exec=/home/pi/hmiAutorun.sh
+
