@@ -21,6 +21,16 @@ DigiPot pot(6, 4, 5);
 //relay
 int motor = 9; //motor
 
+//datos para enviar
+const int startByte = 'S'; // Delimitador de inicio
+const int endByte = 'E';   // Delimitador de fin
+// Estructura para almacenar los datos
+struct SensorData {
+  int enc1;
+};
+
+SensorData sensorData;
+
 //variables para ultrasonico hc-sr04
 int trigPin = 12;    // Trigger
 int echoPin = 13;    // Echo
@@ -79,6 +89,8 @@ void loop() {
   //Serial.println(digitalRead(20));
   dis = ultrasonico();
   Serial.println(dis);
+  datos();
+  //Serial.println(sensorData.enc1);
   if (dis < 6.0 and dis > 2) { //deteccion a 4 cm
     delay(50); //espera de secuencia
     digitalWrite(motor, LOW);
@@ -128,7 +140,7 @@ void pid() {
     seg = x1 / 1000;
     //Serial.print("pulsos");
     //Serial.println(pulsos);
-    Serial.print("vetq: ");
+    //Serial.print("vetq: ");
     Serial.println(vetq);
     temp = pulsos;
     pulsos = 0;               // Inicializamos los pulsos.
@@ -140,7 +152,12 @@ void pid() {
 
   //----SET POINT----
   //sp=analogRead(pot_sp)*(250.0/1023.0); //0-250 vetq  sepoint variable
-  sp = 30.0;
+  if(sensorData.enc1!=0){
+    sp = sensorData.enc1;
+  }
+  else{
+    sp = 30.0;
+  }
   error = sp - pv;
 
   //ecuacion de diferencias
@@ -174,4 +191,25 @@ void pid() {
     i--;
     delay(200);
   }
+}
+
+
+
+
+void datos(){
+  if (Serial.available() > 0) {
+    int inByte = Serial.read();
+
+    // Verificar si el byte recibido es el delimitador de inicio
+    if (inByte == startByte) {
+      // Leer los siguientes bytes (encoder1)
+      sensorData.enc1 = Serial.parseFloat();
+    }
+
+    // Verificar si el byte recibido es el delimitador de fin
+    if (inByte == endByte) {
+      // Procesar los datos recibidos
+    }
+  }
+  
 }
