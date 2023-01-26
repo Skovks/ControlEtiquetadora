@@ -17,6 +17,7 @@ El proyecto desarrollado en este repositorio es un control de una etiquetadora d
 - 7.-Pegar hmiAutorun.sh en la carpeta home
 - 8.-Pegar hmi.Desktop en:
     - cd /etc/xdg/autostart/
-
+HMI:
+https://raw.githubusercontent.com/Skovks/ControlEtiquetadora/master/imagen.png
 
 
