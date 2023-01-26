@@ -18,7 +18,6 @@ El proyecto desarrollado en este repositorio es un control de una etiquetadora d
 - 8.-Pegar hmi.Desktop en:
     - cd /etc/xdg/autostart/
 
-HMI:
-https://raw.githubusercontent.com/Skovks/ControlEtiquetadora/master/image.png
+![Captura de pantalla de HMI](https://raw.githubusercontent.com/Skovks/ControlEtiquetadora/master/image.png)
 
 
