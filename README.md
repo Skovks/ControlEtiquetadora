@@ -1,5 +1,7 @@
-# ControlEtiquetadora
- 
+# Control de etiquetadora de latas botellas 
+El proyecto desarrollado en este repositorio es un control de una etiquetadora de latas/botellas con enfoque 4.0, elaborado con arduino uno, raspberry pi y node red.
+
+
  Instalacion HMI
 - 1.-Instalar node-red en raspberry pi
     - sudo apt-get install nodered
@@ -15,5 +17,6 @@
 - 7.-Pegar hmiAutorun.sh en la carpeta home
 - 8.-Pegar hmi.Desktop en:
     - cd /etc/xdg/autostart/
+
 
 
